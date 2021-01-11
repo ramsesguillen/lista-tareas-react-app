@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import './App.css'
+import { Form } from './components/Form'
+import { Header } from './components/Header'
+import { TareaList } from './components/TareaList'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export const App = () => {
+
+    const tareasLocalStorage = JSON.parse( localStorage.getItem('tareas')) || [];
+
+    const [tareas, setTareas] = useState(  tareasLocalStorage  );
+
+    useEffect( () => {
+        localStorage.setItem('tareas', JSON.stringify( tareas ) );
+    }, [ tareas ]);
+
+
+    const mostrarCompletadasLocalStorage = JSON.parse( localStorage.getItem('mostrarCompletadas')) || true ;
+
+    const [mostrarCompletadas, setMostrarCompletadas] = useState( mostrarCompletadasLocalStorage )
+
+    useEffect( () => {
+        localStorage.setItem('mostrarCompletadas', JSON.stringify( mostrarCompletadas ) );
+    }, [ mostrarCompletadas ]);
+
+
+    return (
+        <div className="contenedor">
+            <Header
+                mostrarCompletadas={ mostrarCompletadas }
+                setMostrarCompletadas={ setMostrarCompletadas }
+            />
+            <Form setTareas={ setTareas } />
+            <TareaList
+                tareas={ tareas }
+                setTareas={ setTareas }
+                mostrarCompletadas={ mostrarCompletadas }
+            />
+        </div>
+    )
 }
-
-export default App;
